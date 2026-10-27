@@ -5,20 +5,26 @@ import re
 #TASK 1
 
 def get_days_from_today(date):
-    object = datetime.datetime.strptime(date, "%Y.%m.%d")
-    today = datetime.datetime.today()
-    return object - today
+    try:
+        given_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        today = datetime.date.today()
+        return (today - given_date).days
+    except ValueError:
+        return None
 
-print(get_days_from_today("2010.05.10").days)
+print(get_days_from_today("2010-05-10"))
 
 
 #TASK 2
 
 def get_numbers_ticket(min, max, quantity):
-    if min < 1 or max > 1000:
-        print('Incorrect input')
-    else:
-        gen = random.sample(range(min, max), quantity)
+    if min < 1 or max > 1000 or min > max:
+        return []
+
+    if quantity < 1 or quantity > max - min + 1:
+        return []
+
+    gen = random.sample(range(min, max + 1), quantity)
     return sorted(gen)
 
 lottery_numbers = get_numbers_ticket(1, 49, 6)
@@ -27,11 +33,10 @@ print("Ваші лотерейні числа:", lottery_numbers)
 
 #TASK 3
 def normalize_phone(phone_number):
-    phone_number = re.sub(r"[^\d+]", "", phone_number)
+    phone_number = re.sub(r"\D", "", phone_number)
+
     if phone_number.startswith("380"):
         phone_number = "+" + phone_number
-    elif phone_number.startswith("+"):
-        pass
     else:
         phone_number = "+38" + phone_number
 
